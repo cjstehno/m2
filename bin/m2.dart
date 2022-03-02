@@ -17,7 +17,7 @@ void main(final List<String> arguments) {
   final m2Adapter = M2Adapter(PlatformUtil().homePath);
 
   runner.addCommand(RepoStashCommand(m2Adapter, outputter));
-  runner.addCommand(RepoUnstashCommand());
+  runner.addCommand(RepoRestoreCommand());
   runner.addCommand(RepoDeleteCommand());
 
   runner.run(arguments);

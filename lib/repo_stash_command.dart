@@ -5,9 +5,6 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-// FIXME: error if stash dir already exists
-// fIXME: testing
-
 class RepoStashCommand extends Command {
   static const _suffix_option = 'suffix';
   static const _default_suffix = 'stashed';
@@ -18,10 +15,10 @@ class RepoStashCommand extends Command {
   @override
   final String description = 'Renames the Maven repository directory.';
 
-  final M2Adapter m2adapter;
-  final Outputter outputter;
+  final M2Adapter _m2adapter;
+  final Outputter _outputter;
 
-  RepoStashCommand(this.m2adapter, this.outputter) {
+  RepoStashCommand(this._m2adapter, this._outputter) {
     argParser.addOption(
       _suffix_option,
       abbr: 's',
@@ -36,17 +33,17 @@ class RepoStashCommand extends Command {
   @override
   void run() async {
     final stashName = 'repository_$suffix';
-    final newDirPath = p.join(m2adapter.m2Path, stashName);
+    final newDirPath = p.join(_m2adapter.m2Path, stashName);
 
-    if (!m2adapter.repositoryDir.existsSync()) {
-      outputter.out('There is no repository directory to stash.');
+    if (!_m2adapter.repositoryDir.existsSync()) {
+      _outputter.out('There is no repository directory to stash.');
     } else if (Directory(newDirPath).existsSync()) {
-      outputter.out('A stashed repository named "$stashName" already exists.');
+      _outputter.out('A stashed repository named "$stashName" already exists.');
     } else {
-      await Directory(p.join(m2adapter.m2Path, 'repository'))
+      await Directory(p.join(_m2adapter.m2Path, 'repository'))
           .rename(newDirPath);
 
-      outputter.out('Repository stashed as repository_$suffix.');
+      _outputter.out('Repository stashed as repository_$suffix.');
     }
   }
 }
