@@ -5,7 +5,7 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-class RepoStashCommand extends Command {
+class StashCommand extends Command {
   static const _suffix_option = 'suffix';
   static const _default_suffix = 'stashed';
 
@@ -18,7 +18,7 @@ class RepoStashCommand extends Command {
   final M2Adapter _m2adapter;
   final Outputter _outputter;
 
-  RepoStashCommand(this._m2adapter, this._outputter) {
+  StashCommand(this._m2adapter, this._outputter) {
     argParser.addOption(
       _suffix_option,
       abbr: 's',

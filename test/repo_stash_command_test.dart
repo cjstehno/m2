@@ -2,29 +2,28 @@ import 'dart:io';
 
 import 'package:args/command_runner.dart';
 import 'package:m2/m2_adapter.dart';
-import 'package:m2/repo_stash_command.dart';
+import 'package:m2/stash_command.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
+import 'temp_dir_provider.dart';
 import 'test_outputter.dart';
 
 void main() {
   late TestOutputter outputter;
   late CommandRunner runner;
-  late Directory homeDir;
+  final homeDir = TempDirProvider('m2');
 
   setUp(() {
     outputter = TestOutputter();
-    homeDir = Directory(p.join(Directory.systemTemp.path, 'm2-test-home'));
+    homeDir.setUp();
 
     runner = CommandRunner('m2', 'unit testing');
-    runner.addCommand(RepoStashCommand(M2Adapter(homeDir.path), outputter));
+    runner.addCommand(StashCommand(M2Adapter(homeDir.path), outputter));
   });
 
   tearDown(() {
-    if (homeDir.existsSync()) {
-      homeDir.deleteSync(recursive: true);
-    }
+    homeDir.tearDown();
   });
 
   test('"m2 stash" with no repository -> error message', () async {
@@ -44,8 +43,8 @@ void main() {
     expect(outputter.lines.length, 1);
     expect(outputter.lines[0], 'Repository stashed as repository_stashed.');
 
-    _expectDirectory(p.join(m2Path, 'repository_stashed'), true);
-    _expectDirectory(p.join(m2Path, 'repository'), false);
+    expectDirectory(p.join(m2Path, 'repository_stashed'), true);
+    expectDirectory(p.join(m2Path, 'repository'), false);
   });
 
   test('"m2 stash -s foo" with repository -> repository_foo', () async {
@@ -58,9 +57,9 @@ void main() {
     expect(outputter.lines.length, 1);
     expect(outputter.lines[0], 'Repository stashed as repository_foo.');
 
-    _expectDirectory(p.join(m2Path, 'repository_foo'), true);
-    _expectDirectory(p.join(m2Path, 'repository_stashed'), false);
-    _expectDirectory(p.join(m2Path, 'repository'), false);
+    expectDirectory(p.join(m2Path, 'repository_foo'), true);
+    expectDirectory(p.join(m2Path, 'repository_stashed'), false);
+    expectDirectory(p.join(m2Path, 'repository'), false);
   });
 
   test('"m2 stash" with repository stashed -> error message', () async {
@@ -79,7 +78,7 @@ void main() {
   });
 }
 
-void _expectDirectory(final String path, final bool exists) {
+void expectDirectory(final String path, final bool exists) {
   expect(
     Directory(path).existsSync(),
     exists,
