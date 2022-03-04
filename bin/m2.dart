@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:m2/delete_command.dart';
+import 'package:m2/list_command.dart';
 import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:m2/platform_util.dart';
@@ -18,7 +19,7 @@ void main(final List<String> arguments) {
   runner.addCommand(StashCommand(m2Adapter, outputter));
   runner.addCommand(RestoreCommand(m2Adapter, outputter));
   runner.addCommand(DeleteCommand(m2Adapter, outputter));
-  // FIXME: list
+  runner.addCommand(ListCommand(m2Adapter, outputter));
 
   runner.run(arguments);
 }

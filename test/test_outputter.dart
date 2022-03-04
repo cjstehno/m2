@@ -6,7 +6,6 @@ class TestOutputter implements Outputter {
 
   @override
   void out(final String line) {
-    print(line);
     lines.add(line);
   }
 

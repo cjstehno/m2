@@ -11,6 +11,10 @@ class M2Adapter {
     return p.join(_homePath, '.m2');
   }
 
+  Directory get m2Directory {
+    return Directory(m2Path);
+  }
+
   Directory get repositoryDir {
     return Directory(p.join(m2Path, 'repository'));
   }

@@ -57,6 +57,8 @@ command. It will result in a list of the suffix names used to stash local reposi
 
 To delete the local Maven repository, run:
 
-    m2 delete
+    m2 delete [-s | --suffix <stash-suffix>]
+
+If the `-s` or `--suffix` option is specified, it will delete the stashed repository with that suffix.
 
 This operation is unrecoverable.
