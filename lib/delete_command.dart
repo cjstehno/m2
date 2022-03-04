@@ -12,7 +12,7 @@ class DeleteCommand extends Command {
   final String name = 'delete';
 
   @override
-  final String description = 'Deletes your local Maven repository.';
+  final String description = 'Deletes a repository (primary by default).';
 
   final M2Adapter _m2;
   final Outputter _outputter;

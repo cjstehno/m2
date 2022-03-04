@@ -14,7 +14,7 @@ class RestoreCommand extends Command {
   final String name = 'restore';
 
   @override
-  final String description = 'Restores a stashed Maven repository.';
+  final String description = 'Restores a stashed repository.';
 
   final M2Adapter _m2adapter;
   final Outputter _outputter;

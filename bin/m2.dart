@@ -6,11 +6,12 @@ import 'package:m2/outputter.dart';
 import 'package:m2/platform_util.dart';
 import 'package:m2/restore_command.dart';
 import 'package:m2/stash_command.dart';
+import 'package:m2/version_command.dart';
 
 void main(final List<String> arguments) {
   final runner = CommandRunner(
-    'scm',
-    'A helper to round out the rough edges imposed by SCM.',
+    'm2',
+    'Maven local repository manager.',
   );
 
   final outputter = Outputter();
@@ -20,6 +21,7 @@ void main(final List<String> arguments) {
   runner.addCommand(RestoreCommand(m2Adapter, outputter));
   runner.addCommand(DeleteCommand(m2Adapter, outputter));
   runner.addCommand(ListCommand(m2Adapter, outputter));
+  runner.addCommand(VersionCommand(outputter));
 
   runner.run(arguments);
 }

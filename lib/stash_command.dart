@@ -13,7 +13,7 @@ class StashCommand extends Command {
   final String name = 'stash';
 
   @override
-  final String description = 'Renames the Maven repository directory.';
+  final String description = 'Renames the repository directory.';
 
   final M2Adapter _m2adapter;
   final Outputter _outputter;

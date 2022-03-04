@@ -19,8 +19,6 @@ class ListCommand extends Command {
 
   ListCommand(this._m2, this._outputter);
 
-  // FIXME: test
-
   @override
   void run() {
     if(_m2.repositoryDir.existsSync()){
