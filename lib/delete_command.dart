@@ -21,7 +21,7 @@ class DeleteCommand extends Command {
     final repoDir = _m2.repositoryDir;
     if (repoDir.existsSync()) {
       await repoDir.delete(recursive: true);
-      _outputter.out('Deleted local Maven repository ($repoDir).');
+      _outputter.out('Deleted local Maven repository.');
     } else {
       _outputter.out('No local Maven repository directory found.');
     }

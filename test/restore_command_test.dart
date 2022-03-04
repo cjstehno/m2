@@ -6,7 +6,7 @@ import 'package:m2/restore_command.dart';
 import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 
-import 'repo_stash_command_test.dart';
+import 'stash_command_test.dart';
 import 'temp_dir_provider.dart';
 import 'test_outputter.dart';
 
@@ -26,8 +26,6 @@ void main() {
   tearDown(() {
     homeDir.tearDown();
   });
-
-  // FIXME: test with existing repo (forced and not)
 
   test('"m2 restore" with no stashed -> error', () async {
     await runner.run(['restore']);
