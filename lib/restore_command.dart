@@ -5,11 +5,11 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-class RestoreCommand extends Command {
-  static const _suffixOption = 'suffix';
-  static const _defaultSuffix = 'stashed';
-  static const _forceFlag = 'force';
+const _suffixOption = 'suffix';
+const _defaultSuffix = 'stashed';
+const _forceFlag = 'force';
 
+class RestoreCommand extends Command {
   @override
   final String name = 'restore';
 
@@ -41,12 +41,10 @@ class RestoreCommand extends Command {
   @override
   void run() async {
     final stashedName = 'repository_$suffix';
-    final stashedPath = p.join(_m2adapter.m2Path, stashedName);
-    final stashedDir = Directory(stashedPath);
+    final stashedDir = Directory(p.join(_m2adapter.m2Path, stashedName));
 
     if (stashedDir.existsSync()) {
-      final repoExists = _m2adapter.repositoryDir.existsSync();
-      if (repoExists) {
+      if (_m2adapter.repositoryDir.existsSync()) {
         if (force) {
           _outputter.out('Deleting the existing repository directory...');
           // delete the existing repo dir
@@ -55,7 +53,7 @@ class RestoreCommand extends Command {
           await restore(stashedDir);
         } else {
           _outputter.out(
-            'Repository already exists - either delete or use --force.',
+            'Repository already exists, either delete or use --force.',
           );
         }
       } else {

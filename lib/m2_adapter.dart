@@ -5,17 +5,11 @@ import 'package:path/path.dart' as p;
 class M2Adapter {
   final String _homePath;
 
-  M2Adapter(this._homePath);
+  const M2Adapter(this._homePath);
 
-  String get m2Path {
-    return p.join(_homePath, '.m2');
-  }
+  String get m2Path => p.join(_homePath, '.m2');
 
-  Directory get m2Directory {
-    return Directory(m2Path);
-  }
+  Directory get m2Directory => Directory(m2Path);
 
-  Directory get repositoryDir {
-    return Directory(p.join(m2Path, 'repository'));
-  }
+  Directory get repositoryDir => Directory(p.join(m2Path, 'repository'));
 }

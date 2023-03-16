@@ -5,9 +5,9 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-class ListCommand extends Command {
-  static const _namePrefix = 'repository_';
+const _namePrefix = 'repository_';
 
+class ListCommand extends Command {
   @override
   final String name = 'list';
 
@@ -21,7 +21,7 @@ class ListCommand extends Command {
 
   @override
   void run() {
-    if(_m2.repositoryDir.existsSync()){
+    if (_m2.repositoryDir.existsSync()) {
       _outputter.out('(primary)');
     }
 

@@ -2,7 +2,6 @@ import 'package:args/command_runner.dart';
 import 'package:m2/outputter.dart';
 
 class VersionCommand extends Command {
-
   @override
   final String name = 'version';
 
@@ -14,7 +13,5 @@ class VersionCommand extends Command {
   VersionCommand(this._outputter);
 
   @override
-  void run() {
-    _outputter.out('v1.0.0');
-  }
+  void run() => _outputter.out('v1.0.0');
 }

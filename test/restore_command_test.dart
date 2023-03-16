@@ -73,7 +73,7 @@ void main() {
 
     await runner.run(['restore']);
 
-    outputter.expects('Repository already exists - either delete or use --force.');
+    outputter.expects('Repository already exists, either delete or use --force.');
 
     expectDirectory(p.join(m2Path, 'repository_stashed'), true);
     expectDirectory(p.join(m2Path, 'repository'), true);

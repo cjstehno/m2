@@ -5,9 +5,9 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-class DeleteCommand extends Command {
-  static const _suffix_option = 'suffix';
+const _suffixOption = 'suffix';
 
+class DeleteCommand extends Command {
   @override
   final String name = 'delete';
 
@@ -19,16 +19,15 @@ class DeleteCommand extends Command {
 
   DeleteCommand(this._m2, this._outputter) {
     argParser.addOption(
-      _suffix_option,
+      _suffixOption,
       abbr: 's',
       help: 'Directory name suffix (defaults to the primary repository)',
     );
   }
 
-  String? get suffix =>
-      argResults != null && argResults![_suffix_option] != null
-          ? argResults![_suffix_option]
-          : null;
+  String? get suffix => argResults != null && argResults![_suffixOption] != null
+      ? argResults![_suffixOption]
+      : null;
 
   @override
   void run() async {

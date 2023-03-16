@@ -5,10 +5,10 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-class StashCommand extends Command {
-  static const _suffix_option = 'suffix';
-  static const _default_suffix = 'stashed';
+const _suffixOption = 'suffix';
+const _defaultSuffix = 'stashed';
 
+class StashCommand extends Command {
   @override
   final String name = 'stash';
 
@@ -20,15 +20,15 @@ class StashCommand extends Command {
 
   StashCommand(this._m2adapter, this._outputter) {
     argParser.addOption(
-      _suffix_option,
+      _suffixOption,
       abbr: 's',
-      help: 'Specifies directory name suffix - defaults to "$_default_suffix".',
+      help: 'Specifies directory name suffix - defaults to "$_defaultSuffix".',
     );
   }
 
-  String get suffix => argResults != null && argResults![_suffix_option] != null
-      ? argResults![_suffix_option]
-      : _default_suffix;
+  String get suffix => argResults != null && argResults![_suffixOption] != null
+      ? argResults![_suffixOption]
+      : _defaultSuffix;
 
   @override
   void run() async {
