@@ -5,8 +5,6 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-const _suffixOption = 'suffix';
-const _defaultSuffix = 'stashed';
 const _forceFlag = 'force';
 
 class RestoreCommand extends Command {
@@ -20,11 +18,6 @@ class RestoreCommand extends Command {
   final Outputter _outputter;
 
   RestoreCommand(this._m2adapter, this._outputter) {
-    argParser.addOption(
-      _suffixOption,
-      abbr: 's',
-      help: 'Repository suffix to be used - defaults to "$_defaultSuffix".',
-    );
     argParser.addFlag(
       _forceFlag,
       abbr: 'f',
@@ -32,15 +25,14 @@ class RestoreCommand extends Command {
     );
   }
 
-  String get suffix => argResults != null && argResults![_suffixOption] != null
-      ? argResults![_suffixOption]
-      : _defaultSuffix;
+  String get suffix =>
+      argResults!.rest.isNotEmpty ? '_${argResults!.rest.first}' : '_stashed';
 
   bool get force => argResults != null && argResults![_forceFlag];
 
   @override
   void run() async {
-    final stashedName = 'repository_$suffix';
+    final stashedName = 'repository$suffix';
     final stashedDir = Directory(p.join(_m2adapter.m2Path, stashedName));
 
     if (stashedDir.existsSync()) {
@@ -66,6 +58,6 @@ class RestoreCommand extends Command {
 
   Future<void> restore(final Directory stashedDir) async {
     await stashedDir.rename(_m2adapter.repositoryDir.path);
-    _outputter.out('Maven repository_$suffix restored.');
+    _outputter.out('Maven repository$suffix restored.');
   }
 }

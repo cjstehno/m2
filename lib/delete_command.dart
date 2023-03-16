@@ -5,8 +5,6 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-const _suffixOption = 'suffix';
-
 class DeleteCommand extends Command {
   @override
   final String name = 'delete';
@@ -17,21 +15,16 @@ class DeleteCommand extends Command {
   final M2Adapter _m2;
   final Outputter _outputter;
 
-  DeleteCommand(this._m2, this._outputter) {
-    argParser.addOption(
-      _suffixOption,
-      abbr: 's',
-      help: 'Directory name suffix (defaults to the primary repository)',
-    );
-  }
+  DeleteCommand(this._m2, this._outputter);
 
-  String? get suffix => argResults != null && argResults![_suffixOption] != null
-      ? argResults![_suffixOption]
-      : null;
+  String get suffix =>
+      argResults!.rest.isNotEmpty ? '_${argResults!.rest.first}' : '';
+
+  // TODO: add a confirmation step?
 
   @override
   void run() async {
-    final dirName = suffix != null ? 'repository_$suffix' : 'repository';
+    final dirName = 'repository$suffix';
     final repoDir = Directory(p.join(_m2.m2Path, dirName));
 
     if (repoDir.existsSync()) {

@@ -25,9 +25,9 @@ If the test mocks need to be updated, run:
 You can cause your local Maven repo to be renamed to `repository_<name-suffix>` in order to force a full local refresh without
 actually deleting the directory.
 
-    m2 stash [-s | --suffix <name-suffix>]
+    m2 stash <name-suffix>
 
-Where the optional `-s` or `--suffix` will append the provided suffix, rather than the default `stashed` value.
+Where the optional `<name-suffix>` argument will append the provided suffix, rather than the default `stashed` value.
 
 You can revert the repo using the `m2 restore` command.
 
@@ -37,13 +37,13 @@ Note: If a stashed repository already exists with the specified (or default) nam
 
 To restore a stashed repo you can run:
 
-    m2 restore [-f | --force] [-s | --suffix <name-suffix>]
+    m2 restore [-f | --force] <name-suffix>
 
 which will rename the `repository_<suffix-name>` directory to `repository`. If a repository directory already exists, you will
 get an error and need to remove it yourself. The `-f` or `--force` flags will cause the existing `repository` directory
 to be deleted before renaming the stashed directory.
 
-The `-s` or `--suffix` options allow for spefication of the repository name suffix (defaults to `stashed`).
+The `<name-suffix>` argument allows for specification of the repository name suffix (defaults to `stashed`).
 
 ### List the Stashed Local Maven Repos
 
@@ -57,8 +57,20 @@ command. It will result in a list of the suffix names used to stash local reposi
 
 To delete the local Maven repository, run:
 
-    m2 delete [-s | --suffix <stash-suffix>]
+    m2 delete <stash-suffix>
 
-If the `-s` or `--suffix` option is specified, it will delete the stashed repository with that suffix.
+If a `<stash-suffix>` argument is specified, it will delete the stashed repository with that suffix, otherwise it will
+delete the primary repository.
 
 This operation is unrecoverable.
+
+### Find Jars in Maven Repo
+
+You can find jars in the Maven repository, by name, using:
+
+    m2 find [-s | --suffix <stash-suffix>] [-g | --group <group>] <jar-name-pattern>
+
+Where `suffix` is the repository suffix to be searched (or primary by default), and `group` is a dot-separated group
+name pattern to search under (may be partial). The `jar-name-pattern` is a case-insensitive name matcher.
+
+All matching jars will be listed with their group and version information.

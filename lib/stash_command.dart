@@ -5,9 +5,6 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-const _suffixOption = 'suffix';
-const _defaultSuffix = 'stashed';
-
 class StashCommand extends Command {
   @override
   final String name = 'stash';
@@ -18,21 +15,14 @@ class StashCommand extends Command {
   final M2Adapter _m2adapter;
   final Outputter _outputter;
 
-  StashCommand(this._m2adapter, this._outputter) {
-    argParser.addOption(
-      _suffixOption,
-      abbr: 's',
-      help: 'Specifies directory name suffix - defaults to "$_defaultSuffix".',
-    );
-  }
+  StashCommand(this._m2adapter, this._outputter);
 
-  String get suffix => argResults != null && argResults![_suffixOption] != null
-      ? argResults![_suffixOption]
-      : _defaultSuffix;
+  String get suffix =>
+      argResults!.rest.isNotEmpty ? '_${argResults!.rest.first}' : '_stashed';
 
   @override
   void run() async {
-    final stashName = 'repository_$suffix';
+    final stashName = 'repository$suffix';
     final newDirPath = p.join(_m2adapter.m2Path, stashName);
 
     if (!_m2adapter.repositoryDir.existsSync()) {
@@ -43,7 +33,7 @@ class StashCommand extends Command {
       await Directory(p.join(_m2adapter.m2Path, 'repository'))
           .rename(newDirPath);
 
-      _outputter.out('Repository stashed as repository_$suffix.');
+      _outputter.out('Repository stashed as repository$suffix.');
     }
   }
 }

@@ -34,7 +34,7 @@ void main() {
   });
 
   test('"m2 restore -s saved" with no stashed -> error', () async {
-    await runner.run(['restore', '-s', 'saved']);
+    await runner.run(['restore', 'saved']);
 
     outputter.expects('No stashed repository "repository_saved" exists.');
   });
@@ -57,7 +57,7 @@ void main() {
     final m2Path = p.join(homeDir.path, '.m2');
     Directory(p.join(m2Path, 'repository_offline')).createSync(recursive: true);
 
-    await runner.run(['restore', '-s', 'offline']);
+    await runner.run(['restore', 'offline']);
 
     outputter.expects('Maven repository_offline restored.');
 
@@ -73,7 +73,8 @@ void main() {
 
     await runner.run(['restore']);
 
-    outputter.expects('Repository already exists, either delete or use --force.');
+    outputter
+        .expects('Repository already exists, either delete or use --force.');
 
     expectDirectory(p.join(m2Path, 'repository_stashed'), true);
     expectDirectory(p.join(m2Path, 'repository'), true);

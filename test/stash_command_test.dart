@@ -52,7 +52,7 @@ void main() {
     final m2Path = p.join(homeDir.path, '.m2');
     Directory(p.join(m2Path, 'repository')).createSync(recursive: true);
 
-    await runner.run(['stash', '-s', 'foo']);
+    await runner.run(['stash','foo']);
 
     expect(outputter.lines.length, 1);
     expect(outputter.lines[0], 'Repository stashed as repository_foo.');

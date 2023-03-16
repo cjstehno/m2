@@ -24,7 +24,7 @@ class ListCommand extends Command {
     if (_m2.repositoryDir.existsSync()) {
       _outputter.out('(primary)');
     }
-
+    
     _m2.m2Directory
         .listSync()
         .whereType<Directory>()

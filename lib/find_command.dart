@@ -26,12 +26,12 @@ class FindCommand extends Command {
       abbr: 's',
       help: 'Repository name suffix (defaults to the primary repository).',
     );
-    argParser.addOption(_groupOption,
-        abbr: 'g',
-        help:
-            'The group to be searched (may be partial leading in dot-notation).');
-    argParser.addOption('jar',
-        abbr: 'j', help: 'The jar name pattern (case-insensitive contains).');
+    argParser.addOption(
+      _groupOption,
+      abbr: 'g',
+      help:
+          'The group to be searched (may be partial leading in dot-notation).',
+    );
   }
 
   String? get suffix => argResults != null && argResults![_suffixOption] != null
@@ -42,10 +42,7 @@ class FindCommand extends Command {
       ? argResults![_groupOption]
       : null;
 
-  // fIXME: should be required
-  String? get jar => argResults != null && argResults![_jarOption] != null
-      ? argResults![_jarOption]
-      : null;
+  String get jar => argResults!.rest.isNotEmpty ? argResults!.rest.first : '';
 
   @override
   void run() {
@@ -53,15 +50,13 @@ class FindCommand extends Command {
     final repoDir = Directory(p.join(_m2.m2Path, dirName));
 
     if (repoDir.existsSync()) {
-      // navigate down to the group prefix (if given)
-      final Directory searchedDir = _applyGroupDir(repoDir);
-
-      // FIXME: find matching jars under searched dir
-      searchedDir
+      _applyGroupDir(repoDir)
           .listSync(recursive: true)
           .whereType<File>()
           .map((it) => it.path)
           .where((pth) => pth.endsWith('.jar'))
+          .where((pth) => !pth.endsWith('-sources.jar'))
+          .where((pth) => !pth.contains('SNAPSHOT'))
           .where((pth) => _filenameMatches(pth))
           .forEach((pth) => _printJar(repoDir, pth));
     } else {
@@ -75,20 +70,33 @@ class FindCommand extends Command {
       : repoDir;
 
   bool _filenameMatches(final String path) =>
-      _fileName(path).toLowerCase().contains(jar!.toLowerCase());
+      _fileName(path).toLowerCase().contains(jar.toLowerCase());
 
   void _printJar(final Directory repoDir, final String path) {
-    // /Users/stehnoc/.m2/repository/org/apache/zookeeper/zookeeper-jute/3.7.0/zookeeper-jute-3.7.0.jar
     final jarName = _fileName(path);
-    final jarVersion =
-        path.substring(path.lastIndexOf('-') + 1, path.lastIndexOf('.'));
+    final jarVersion = _jarVersion(path);
+    final jarGroup = _jarGroup(repoDir.path, path, jarName);
 
-    final localPath = path.replaceFirst(repoDir.path, '');
-    final jarGroup = localPath.substring(1, localPath.indexOf(jarName) + jarName.length ).replaceAll('/', '.');
-
-    _outputter.out("${jarGroup.padRight(65)}${jarName.padRight(30)}\t$jarVersion");
+    // TODO: better way of formatting
+    _outputter.out(
+      "${jarGroup.padRight(70)}${jarName.padRight(35)}\t$jarVersion",
+    );
   }
 
   static String _fileName(final String path) =>
       path.substring(path.lastIndexOf('/') + 1, path.lastIndexOf("-"));
+
+  static String _jarVersion(final String path) =>
+      path.substring(path.lastIndexOf('-') + 1, path.lastIndexOf('.'));
+
+  static String _jarGroup(
+    final String repoPath,
+    final String path,
+    final String jarName,
+  ) {
+    final localPath = path.replaceFirst(repoPath, '');
+    return localPath
+        .substring(1, localPath.indexOf(jarName) + jarName.length)
+        .replaceAll('/', '.');
+  }
 }

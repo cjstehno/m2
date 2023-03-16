@@ -46,9 +46,10 @@ void main() {
   test('delete stashed repository - succeeds', () async {
     // create a repo dir
     final m2Path = p.join(homeDir.path, '.m2');
-    Directory(p.join(m2Path, 'repository_something')).createSync(recursive: true);
+    Directory(p.join(m2Path, 'repository_something'))
+        .createSync(recursive: true);
 
-    await runner.run(['delete', '--suffix', 'something']);
+    await runner.run(['delete', 'something']);
 
     outputter.expects('Deleted "repository_something".');
 
