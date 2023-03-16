@@ -18,12 +18,12 @@ void main(final List<String> arguments) {
   final m2Adapter = M2Adapter(_resolveHomePath());
 
   CommandRunner(_command, _description)
+    ..addCommand(VersionCommand(outputter))
     ..addCommand(StashCommand(m2Adapter, outputter))
     ..addCommand(RestoreCommand(m2Adapter, outputter))
     ..addCommand(DeleteCommand(m2Adapter, outputter))
     ..addCommand(ListCommand(m2Adapter, outputter))
     ..addCommand(FindCommand(m2Adapter, outputter))
-    ..addCommand(VersionCommand(outputter))
     ..run(arguments);
 }
 

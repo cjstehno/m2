@@ -33,6 +33,9 @@ You can revert the repo using the `m2 restore` command.
 
 Note: If a stashed repository already exists with the specified (or default) name, an error will occur.
 
+If you want to stash the repository, but leave the existing one intact, use the `-n | --no-delete` flag, which causes the
+command to copy the repository rather than moving it.
+
 ### Restore the Local Maven Repo
 
 To restore a stashed repo you can run:

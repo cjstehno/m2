@@ -1,9 +1,12 @@
 import 'dart:io';
 
 import 'package:args/command_runner.dart';
+import 'package:io/io.dart';
 import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
+
+const _noDeleteFlag = 'no-delete';
 
 class StashCommand extends Command {
   @override
@@ -15,10 +18,16 @@ class StashCommand extends Command {
   final M2Adapter _m2adapter;
   final Outputter _outputter;
 
-  StashCommand(this._m2adapter, this._outputter);
+  StashCommand(this._m2adapter, this._outputter) {
+    argParser.addFlag(_noDeleteFlag,
+        abbr: 'n',
+        help: 'Does not delete the original repository after stashing.');
+  }
 
   String get suffix =>
       argResults!.rest.isNotEmpty ? '_${argResults!.rest.first}' : '_stashed';
+
+  bool get noDelete => argResults != null && argResults![_noDeleteFlag];
 
   @override
   void run() async {
@@ -30,10 +39,17 @@ class StashCommand extends Command {
     } else if (Directory(newDirPath).existsSync()) {
       _outputter.out('A stashed repository named "$stashName" already exists.');
     } else {
-      await Directory(p.join(_m2adapter.m2Path, 'repository'))
-          .rename(newDirPath);
+      final repoPath = p.join(_m2adapter.m2Path, 'repository');
 
-      _outputter.out('Repository stashed as repository$suffix.');
+      if (noDelete) {
+        copyPathSync(repoPath, newDirPath);
+      } else {
+        await Directory(repoPath).rename(newDirPath);
+      }
+
+      _outputter.out(
+        'Repository stashed as repository$suffix.${noDelete ? ' The original repository was not deleted.' : ''}',
+      );
     }
   }
 }
