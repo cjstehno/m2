@@ -3,15 +3,18 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 class M2Adapter {
-  // TODO: figure out how to cache these getter values (memoized?)
+  final String m2Path;
+  final Directory m2Directory;
+  final Directory repositoryDir;
 
-  final String _homePath;
+  M2Adapter._(this.m2Path, this.m2Directory, this.repositoryDir);
 
-  const M2Adapter(this._homePath);
-
-  String get m2Path => p.join(_homePath, '.m2');
-
-  Directory get m2Directory => Directory(m2Path);
-
-  Directory get repositoryDir => Directory(p.join(m2Path, 'repository'));
+  factory M2Adapter(final String homePath) {
+    final m2Path = p.join(homePath, '.m2');
+    return M2Adapter._(
+      m2Path,
+      Directory(m2Path),
+      Directory(p.join(m2Path, 'repository')),
+    );
+  }
 }
