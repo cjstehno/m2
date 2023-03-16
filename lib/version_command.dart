@@ -13,5 +13,5 @@ class VersionCommand extends Command {
   VersionCommand(this._outputter);
 
   @override
-  void run() => _outputter.out('v1.0.0');
+  void run() => _outputter.out('v1.1.0');
 }

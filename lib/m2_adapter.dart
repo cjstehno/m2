@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 class M2Adapter {
+  // TODO: figure out how to cache these getter values (memoized?)
+
   final String _homePath;
 
   const M2Adapter(this._homePath);

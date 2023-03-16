@@ -2,9 +2,9 @@
 
 A tool to help manage your local Maven repository.
 
-## Building
+## Building Executable
 
-TBD
+    dart compile exe bin/m2.dart -o dist/m2
 
 ## Running (Dev)
 
