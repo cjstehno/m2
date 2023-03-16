@@ -6,7 +6,7 @@ import 'package:m2/m2_adapter.dart';
 import 'package:m2/outputter.dart';
 import 'package:path/path.dart' as p;
 
-const _noDeleteFlag = 'no-delete';
+const _deleteFlag = 'delete';
 
 class StashCommand extends Command {
   @override
@@ -19,15 +19,17 @@ class StashCommand extends Command {
   final Outputter _outputter;
 
   StashCommand(this._m2adapter, this._outputter) {
-    argParser.addFlag(_noDeleteFlag,
-        abbr: 'n',
-        help: 'Does not delete the original repository after stashing.');
+    argParser.addFlag(
+      _deleteFlag,
+      defaultsTo: true,
+      help: 'Deletes the original repository after stashing.',
+    );
   }
 
   String get suffix =>
       argResults!.rest.isNotEmpty ? '_${argResults!.rest.first}' : '_stashed';
 
-  bool get noDelete => argResults != null && argResults![_noDeleteFlag];
+  bool get delete => argResults != null && argResults![_deleteFlag];
 
   @override
   void run() async {
@@ -41,14 +43,14 @@ class StashCommand extends Command {
     } else {
       final repoPath = p.join(_m2adapter.m2Path, 'repository');
 
-      if (noDelete) {
-        copyPathSync(repoPath, newDirPath);
-      } else {
+      if (delete) {
         await Directory(repoPath).rename(newDirPath);
+      } else {
+        copyPathSync(repoPath, newDirPath);
       }
 
       _outputter.out(
-        'Repository stashed as repository$suffix.${noDelete ? ' The original repository was not deleted.' : ''}',
+        'Repository stashed as repository$suffix.${delete ? ' The original repository was not deleted.' : ''}',
       );
     }
   }
